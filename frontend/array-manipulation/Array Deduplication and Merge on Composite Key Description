@@ -1,0 +1,32 @@
+const logs = [
+  { userId: "u1", action: "click", count: 2, timestamp: 100 },
+  { userId: "u2", action: "scroll", count: 5, timestamp: 120 },
+  { userId: "u1", action: "click", count: 3, timestamp: 150 },
+  { userId: "u1", action: "hover", count: 1, timestamp: 110 },
+  { userId: "u2", action: "scroll", count: 2, timestamp: 140 },
+];
+
+const mergeLogs = (logs) => {
+  const grouped = logs.reduce((acc, item) => {
+    const { userId, action, count, timestamp } = item;
+    const compositeKey = `${userId}_${action}`;
+
+    if (!acc[compositeKey]) {
+      acc[compositeKey] = {
+        userId,
+        action,
+        count: 0,
+        timestamp: 0,
+      };
+    }
+
+    acc[compositeKey].count += count;
+    acc[compositeKey].timestamp = Math.max(acc[compositeKey].timestamp, timestamp);
+
+    return acc;
+  }, {});
+
+  return Object.values(grouped);
+};
+
+console.log(mergeLogs(logs));
