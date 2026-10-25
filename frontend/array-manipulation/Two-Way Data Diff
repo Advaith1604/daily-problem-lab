@@ -1,0 +1,33 @@
+const prevConfig = { env: "prod", port: 8080, debug: false, timeout: 3000 };
+const nextConfig = { env: "prod", port: 9000, debug: true, retries: 3 };
+
+const getObjectDiff = (prev, next) => {
+  const diff = {
+    added: {},
+    removed: {},
+    modified: {},
+  };
+
+  // Phase 1: Inspect keys in prev for removals and modifications
+  for (const key in prev) {
+    if (!Object.hasOwn(next, key)) {
+      diff.removed[key] = prev[key];
+    } else if (prev[key] !== next[key]) {
+      diff.modified[key] = {
+        from: prev[key],
+        to: next[key],
+      };
+    }
+  }
+
+  // Phase 2: Inspect keys in next for newly added entries
+  for (const key in next) {
+    if (!Object.hasOwn(prev, key)) {
+      diff.added[key] = next[key];
+    }
+  }
+
+  return diff;
+};
+
+console.log(getObjectDiff(prevConfig, nextConfig));
