@@ -1,0 +1,33 @@
+const categories = [
+  { id: 1, name: "Computers", parentId: null },
+  { id: 2, name: "Laptops", parentId: 1 },
+  { id: 3, name: "Gaming Laptops", parentId: 2 },
+  { id: 4, name: "Desktops", parentId: 1 },
+  { id: 5, name: "Appliances", parentId: null },
+];
+
+const buildTree = (items) => {
+  // Pass 1: Build a lookup map of all nodes initialized with empty children
+  const map = items.reduce((acc, item) => {
+    acc[item.id] = {
+      ...item,
+      children: [],
+    };
+    return acc;
+  }, {});
+
+  const roots = [];
+
+  // Pass 2: Wire parent-child relationships using memory references
+  for (const node of Object.values(map)) {
+    if (node.parentId === null) {
+      roots.push(node);
+    } else if (map[node.parentId]) {
+      map[node.parentId].children.push(node);
+    }
+  }
+
+  return roots;
+};
+
+console.log(JSON.stringify(buildTree(categories), null, 2));
