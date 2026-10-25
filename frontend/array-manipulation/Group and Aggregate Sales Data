@@ -1,0 +1,27 @@
+const transactions = [
+  { id: 1, category: "Electronics", item: "Laptop", price: 1000, units: 2 },
+  { id: 2, category: "Furniture", item: "Chair", price: 150, units: 4 },
+  { id: 3, category: "Electronics", item: "Mouse", price: 25, units: 5 },
+  { id: 4, category: "Furniture", item: "Desk", price: 300, units: 1 },
+  { id: 5, category: "Stationery", item: "Pen", price: 2, units: 50 },
+];
+
+const aggregateSales = (transactions) => {
+  return transactions.reduce((acc, transaction) => {
+    const { category, price, units } = transaction;
+
+    if (!acc[category]) {
+      acc[category] = {
+        totalRevenue: 0,
+        totalUnits: 0,
+      };
+    }
+
+    acc[category].totalRevenue += price * units;
+    acc[category].totalUnits += units;
+
+    return acc;
+  }, {});
+};
+
+console.log(aggregateSales(transactions));
