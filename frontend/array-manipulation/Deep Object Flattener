@@ -1,0 +1,41 @@
+const userProfile = {
+  user: {
+    name: "Alex",
+    address: {
+      city: "Seattle",
+      geo: {
+        lat: 47.6062,
+        lng: -122.3321,
+      },
+    },
+  },
+  preferences: {
+    theme: "dark",
+  },
+};
+
+const flattenObject = (target) => {
+  if (!target || typeof target !== "object") return {};
+
+  const result = {};
+
+  const traverse = (currentObj, currentPath = "") => {
+    for (const key in currentObj) {
+      if (!Object.prototype.hasOwnProperty.call(currentObj, key)) continue;
+
+      const value = currentObj[key];
+      const newPath = currentPath ? `${currentPath}.${key}` : key;
+
+      if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+        traverse(value, newPath);
+      } else {
+        result[newPath] = value;
+      }
+    }
+  };
+
+  traverse(target);
+  return result;
+};
+
+console.log(flattenObject(userProfile));
